@@ -412,3 +412,48 @@ h1 {
   white-space: pre-wrap;
   word-break: break-all;
 }
+
+/* MOBILE FIXES */
+@media (max-width: 480px) {
+
+  /* Réduire encore la taille des cellules */
+  :root {
+    --cell-size: 32px;
+    --num-size: 28px;
+    --control-font: 13px;
+  }
+
+  /* Board centré et jamais trop large */
+  #board {
+    transform: scale(0.92);
+    transform-origin: top center;
+  }
+
+  /* Number pad plus compact */
+  .number-pad {
+    gap: 3px;
+  }
+
+  /* Boutons plus petits */
+  button, select {
+    min-width: 60px;
+    padding: 6px 10px;
+  }
+
+  /* Panneau compte */
+  #account-panel {
+    width: 90%;
+    right: 5%;
+  }
+
+  /* Admin panel */
+  #admin-debug {
+    width: 90%;
+    left: 5%;
+  }
+
+  /* Titre plus petit */
+  h1 {
+    font-size: 1.8rem;
+  }
+}
