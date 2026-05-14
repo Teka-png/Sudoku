@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sudoku</title>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXX"
+     crossorigin="anonymous"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Bouton compte -->
+  <button id="account-toggle" class="account-icon">👤</button>
+
+  <!-- Panneau compte -->
+  <div id="account-panel">
+    <div id="account-display">
+      <span id="account-username"></span>
+      <button id="logout-btn" class="small-btn">Logout</button>
+    </div>
+
+    <div id="account-login">
+      <input id="login-username" type="text" placeholder="Username" />
+      <input id="login-password" type="password" placeholder="Password (min 8)" />
+      <button id="login-btn" class="small-btn">Login</button>
+      <button id="register-btn" class="small-btn">Register</button>
+    </div>
+  </div>
+
+  <div class="app">
+    <h1>Sudoku</h1>
+
+    <div class="controls">
+      <select id="difficulty">
+        <option value="40">Easy</option>
+        <option value="34">Medium</option>
+        <option value="28">Hard</option>
+        <option value="24">Expert</option>
+      </select>
+
+      <button id="new-game">New Game</button>
+      <button id="solve">Solve</button>
+      <button id="reset">Reset</button>
+      <button id="notes-toggle">✏️ Notes</button>
+      <button id="theme-toggle">🌙</button>
+    </div>
+
+    <div id="timer">00:00</div>
+    <div id="gen-stats"></div>
+
+    <!-- Zone de pub -->
+    <div style="margin:20px 0;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXX"
+           data-ad-slot="YYYY"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <div id="board"></div>
+
+    <div id="win-screen">🎉 Puzzle Solved! 🎉</div>
+
+    <div class="number-pad" id="number-pad"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- Admin Debug Panel -->
+  <div id="admin-debug" style="display:none;">
+    <h2>Admin Debug Panel</h2>
+    <button id="debug-refresh" class="small-btn">Refresh Data</button>
+    <button id="debug-clear" class="small-btn">Clear All Accounts</button>
+    <pre id="debug-output"></pre>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
