@@ -1,2 +1,32 @@
+# --- ENVIRONNEMENT & SECRETS ---
 .env
+*.env
+
+# --- DONNÉES SENSIBLES ---
 accounts.json
+
+# --- NODE / NPM ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# --- BUILD / CACHE ---
+dist/
+build/
+.cache/
+.tmp/
+
+# --- OS FILES ---
+.DS_Store
+Thumbs.db
+
+# --- EDITORS ---
+.vscode/
+.idea/
+
+# --- LOGS ---
+logs/
+*.log
+*.log.*
