@@ -1,5 +1,6 @@
 // ── GLOBALS ──────────────────────────────────────────────
 // Auto-detect backend URL depending on environment
+// Auto-detect backend URL depending on environment
 let API;
 
 if (window.location.hostname.includes("github.dev")) {
@@ -7,11 +8,12 @@ if (window.location.hostname.includes("github.dev")) {
   API = window.location.origin.replace("-5500", "-3000");
 } else if (window.location.hostname.includes("github.io")) {
   // Running on GitHub Pages (production)
-  API = "https://your-backend-domain.com"; // <-- replace with your deployed backend
+  API = "https://sudoku-1g0x.onrender.com"; // <-- TON backend Render
 } else {
   // Running locally
   API = "http://localhost:3000";
 }
+
 
 // Mode notes activé ou non
 let notesMode = false;
