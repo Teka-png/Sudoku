@@ -282,7 +282,7 @@ h1 {
 #account-panel {
   position: fixed;
   top: 70px;
-  right: 15px;
+  right: -100%;   /* ✔ drawer fermé par défaut */
   width: 280px;
   padding: 15px;
   background: var(--panel-bg);
@@ -291,7 +291,9 @@ h1 {
   flex-direction: column;
   gap: 10px;
   z-index: 999;
+  transition: right 0.3s ease; /* ✔ ajoute la transition */
 }
+
 
 #account-login {
   display: flex;
