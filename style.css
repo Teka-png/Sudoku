@@ -413,79 +413,56 @@ h1 {
   word-break: break-all;
 }
 
-/* MOBILE FIXES */
+
 @media (max-width: 480px) {
 
-  /* Réduire encore la taille des cellules */
-  :root {
-    --cell-size: 32px;
-    --num-size: 28px;
-    --control-font: 13px;
-  }
-
-  /* Board centré et jamais trop large */
-  #board {
-    transform: scale(0.92);
-    transform-origin: top center;
-  }
-
-  /* Number pad plus compact */
-  .number-pad {
-    gap: 3px;
-  }
-
-  /* Boutons plus petits */
-  button, select {
-    min-width: 60px;
-    padding: 6px 10px;
-  }
-
-  /* Panneau compte */
-  #account-panel {
-    width: 90%;
-    right: 5%;
-  }
-
-  /* Admin panel */
-  #admin-debug {
-    width: 90%;
-    left: 5%;
-  }
-
-  /* Titre plus petit */
-  h1 {
-    font-size: 1.8rem;
-  }
-}
-
-/* MOBILE PREMIUM UI */
-@media (max-width: 480px) {
-
-  /* Réduction générale */
   body {
-    padding: 0;
     margin: 0;
-    transform: translateZ(0);
+    padding: 0;
+    background: var(--bg);
+    overflow-x: hidden;
+    font-size: 14px;
   }
 
   h1 {
     font-size: 1.6rem;
-    margin-bottom: 10px;
+    margin: 10px 0 5px 0;
+    text-align: center;
   }
 
-  /* Board responsive */
+  /* Controls en haut, scrollables */
+  .controls {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 8px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  button, select {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  /* Board auto‑scalable */
   #board {
     width: 100%;
-    max-width: 330px;
-    margin: 0 auto;
+    max-width: 360px;
+    margin: 10px auto;
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     gap: 1px;
-    transform: scale(1);
   }
 
   .cell {
-    height: 32px;
+    height: 34px;
     font-size: 18px;
   }
 
@@ -493,46 +470,49 @@ h1 {
     font-size: 8px;
   }
 
-  /* Controls en 2 lignes */
-  .controls {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    width: 100%;
-    max-width: 330px;
-    margin: 0 auto 10px auto;
-  }
-
-  button, select {
-    padding: 6px 4px;
-    font-size: 12px;
-  }
-
-  /* Number pad compact */
+  /* Number pad mobile */
   .number-pad {
-    max-width: 330px;
-    margin: 10px auto;
-    gap: 4px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--panel);
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    border-top: 2px solid var(--border);
   }
 
   .number-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    font-size: 20px;
+    border-radius: 8px;
   }
 
-  /* Account panel mobile */
+  /* Account panel en drawer */
   #account-panel {
-    width: 90%;
-    right: 5%;
-    top: 60px;
-    padding: 10px;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    height: 100%;
+    background: var(--panel);
+    padding: 20px;
+    transition: right 0.3s ease;
+    z-index: 999;
+  }
+
+  #account-panel.open {
+    right: 0;
   }
 
   /* Admin panel */
   #admin-debug {
     width: 90%;
     left: 5%;
+    top: 80px;
   }
 
   /* Win screen */
