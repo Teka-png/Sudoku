@@ -457,3 +457,87 @@ h1 {
     font-size: 1.8rem;
   }
 }
+
+/* MOBILE PREMIUM UI */
+@media (max-width: 480px) {
+
+  /* Réduction générale */
+  body {
+    padding: 0;
+    margin: 0;
+    transform: translateZ(0);
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+
+  /* Board responsive */
+  #board {
+    width: 100%;
+    max-width: 330px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 1px;
+    transform: scale(1);
+  }
+
+  .cell {
+    height: 32px;
+    font-size: 18px;
+  }
+
+  .cell.notes .candidates div {
+    font-size: 8px;
+  }
+
+  /* Controls en 2 lignes */
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    width: 100%;
+    max-width: 330px;
+    margin: 0 auto 10px auto;
+  }
+
+  button, select {
+    padding: 6px 4px;
+    font-size: 12px;
+  }
+
+  /* Number pad compact */
+  .number-pad {
+    max-width: 330px;
+    margin: 10px auto;
+    gap: 4px;
+  }
+
+  .number-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+
+  /* Account panel mobile */
+  #account-panel {
+    width: 90%;
+    right: 5%;
+    top: 60px;
+    padding: 10px;
+  }
+
+  /* Admin panel */
+  #admin-debug {
+    width: 90%;
+    left: 5%;
+  }
+
+  /* Win screen */
+  #win-screen {
+    font-size: 1.4rem;
+    padding: 20px;
+  }
+}
