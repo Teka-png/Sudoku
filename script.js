@@ -885,8 +885,9 @@ document.getElementById("theme-toggle").addEventListener("click", () => {
 // ACCOUNT UI TOGGLE
 document.getElementById("account-toggle").addEventListener("click", () => {
   const panel = document.getElementById("account-panel");
-  panel.classList.toggle("open");
+  panel.style.display = (panel.style.display === "flex") ? "none" : "flex";
 });
+
 
 
 
