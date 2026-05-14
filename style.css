@@ -74,42 +74,6 @@ body.dark {
   --shadow: 0 4px 20px rgba(0,0,0,0.8);
 }
 
-/* RESPONSIVE VARIABLES */
-@media (max-width: 600px) {
-  :root {
-    --cell-size: 40px;
-    --num-size: 35px;
-    --control-padding: 8px;
-    --control-font: 14px;
-  }
-}
-@media (max-width: 400px) {
-  :root {
-    --cell-size: 30px;
-    --num-size: 28px;
-    --control-padding: 6px;
-    --control-font: 12px;
-  }
-}
-
-/* LARGE SCREENS */
-@media (min-width: 1200px) {
-  :root {
-    --cell-size: 80px;
-    --num-size: 60px;
-    --control-padding: 12px;
-    --control-font: 18px;
-  }
-}
-@media (min-width: 1800px) {
-  :root {
-    --cell-size: 100px;
-    --num-size: 78px;
-    --control-padding: 16px;
-    --control-font: 22px;
-  }
-}
-
 /* FULL PAGE BACKGROUND */
 body {
   background: var(--bg-gradient), var(--bg-main);
@@ -276,7 +240,7 @@ h1 {
 
 /* Candidate notes inside cells */
 .cell.notes {
-  font-size: 0; /* hide normal text */
+  font-size: 0;
   position: relative;
 }
 
@@ -296,6 +260,7 @@ h1 {
   align-items: center;
   justify-content: center;
 }
+
 /* ACCOUNT PANEL */
 #account-toggle {
   position: fixed;
@@ -318,7 +283,7 @@ h1 {
   position: fixed;
   top: 70px;
   right: 15px;
-  width: 280px;              /* plus large qu'avant */
+  width: 280px;
   padding: 15px;
   background: var(--panel-bg);
   box-shadow: var(--panel-shadow);
@@ -331,13 +296,12 @@ h1 {
 
 #account-login {
   display: flex;
-  flex-direction: column;    /* tout en colonne */
+  flex-direction: column;
   gap: 8px;
 }
 
 #account-panel input {
   width: 100%;
-  box-sizing: border-box;
   padding: 6px;
   border-radius: 6px;
   border: 1px solid var(--btn-border);
@@ -361,7 +325,8 @@ h1 {
   gap: 10px;
   text-align: center;
 }
-/* TOAST NOTIFICATION */
+
+/* TOAST */
 #toast {
   position: fixed;
   bottom: 30px;
@@ -384,6 +349,8 @@ h1 {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ADMIN PANEL */
 #admin-debug {
   position: fixed;
   bottom: 20px;
@@ -413,7 +380,9 @@ h1 {
   word-break: break-all;
 }
 
-
+/* ─────────────────────────────────────────────── */
+/* MOBILE APP LAYOUT — PREMIUM VERSION             */
+/* ─────────────────────────────────────────────── */
 @media (max-width: 480px) {
 
   body {
@@ -476,12 +445,12 @@ h1 {
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--panel);
+    background: var(--panel-bg);
     padding: 10px 0;
     display: flex;
     justify-content: center;
     gap: 6px;
-    border-top: 2px solid var(--border);
+    border-top: 2px solid var(--border-strong);
   }
 
   .number-btn {
@@ -498,7 +467,7 @@ h1 {
     right: -100%;
     width: 80%;
     height: 100%;
-    background: var(--panel);
+    background: var(--panel-bg);
     padding: 20px;
     transition: right 0.3s ease;
     z-index: 999;
