@@ -327,8 +327,8 @@ class SudokuBoard {
   reset() {
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
-        if (!this.fixed[row][c]) {
-          this.board[row][c] = 0;
+        if (!this.fixed[r][c]) {
+          this.board[r][c] = 0;
         }
       }
     }
@@ -898,11 +898,14 @@ document.getElementById("login-btn").addEventListener("click", () => {
 });
 
 // REGISTER
-document.getElementById("register-btn").addEventListener("click", () => {
+document.getElementById("register-btn").addEventListener("click", async () => {
   const u = document.getElementById("login-username").value.trim();
   const p = document.getElementById("login-password").value;
-  if (registerUser(u, p)) loginUser(u, p);
+
+  const success = await registerUser(u, p);
+  if (success) await loginUser(u, p);
 });
+
 
 // LOGOUT
 document.getElementById("logout-btn").addEventListener("click", logoutUser);
