@@ -1,31 +1,19 @@
-// ── GLOBALS ──────────────────────────────────────────────
-// Auto-detect backend URL depending on environment
-// Auto-detect backend URL depending on environment
 let API;
 
 if (window.location.hostname.includes("github.dev")) {
-  // Running inside Codespaces
   API = window.location.origin.replace("-5500", "-3000");
 } else if (window.location.hostname.includes("github.io")) {
-  // Running on GitHub Pages (production)
-  API = "https://sudoku-1g0x.onrender.com"; // <-- TON backend Render
+  API = "https://sudoku-1g0x.onrender.com";
 } else {
-  // Running locally
   API = "http://localhost:3000";
 }
 
-
-// Mode notes activé ou non
 let notesMode = false;
-
-// Tableau 9×9 contenant des Sets pour stocker les candidats
 let notes = Array.from({ length: 9 }, () =>
   Array.from({ length: 9 }, () => new Set())
 );
-
 let solvingByAdmin = false;
 
-// ── utils ──────────────────────────────────────────────
 function cloneBoard(board) {
   return board.map(row => [...row]);
 }
@@ -38,7 +26,6 @@ function shuffle(array) {
   return array;
 }
 
-// ── solver ─────────────────────────────────────────────
 function isValid(board, row, col, num) {
   for (let x = 0; x < 9; x++) {
     if (x !== col && board[row][x] === num) return false;
@@ -110,7 +97,6 @@ function countSolutions(board, limit = 2) {
   return count;
 }
 
-// ── generator ──────────────────────────────────────────
 function generateSolvedBoard() {
   const board = Array.from({ length: 9 }, () => Array(9).fill(0));
   solve(board);
@@ -148,7 +134,6 @@ function generatePuzzle(clues = 34) {
   return { board, attempts, rejections };
 }
 
-// ── human logic solver ─────────────────────────────────
 function buildCandidateMap(board) {
   const map = [];
   for (let r = 0; r < 9; r++) {
@@ -276,8 +261,6 @@ function applyNakedPairs(board, map) {
   return progress;
 }
 
-// ── human logic solver (suite) ───────────────────────────────
-
 function isLogicSolvable(puzzle) {
   const board = cloneBoard(puzzle);
   const map = buildCandidateMap(board);
@@ -304,65 +287,40 @@ function generateLogicPuzzle(clues = 34) {
   }
 }
 
-// ── board class ──────────────────────────────────────────────
-
 class SudokuBoard {
   constructor(board) {
-    this.board = board.map(row => row.slice()); // deep copy
+    this.board = board.map(row => row.slice());
+    this.fixed = Array.from({ length: 9 }, () => Array(9).fill(false));
 
-    // fixed[r][c] = true → case non modifiable
-    this.fixed = Array.from({ length: 9 }, () =>
-      Array(9).fill(false)
-    );
-
-    // Définir les cases fixes (celles données par le puzzle)
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
-        if (this.board[r][c] !== 0) {
-          this.fixed[r][c] = true;
-        }
+        if (this.board[r][c] !== 0) this.fixed[r][c] = true;
       }
     }
   }
 
-  get(row, col) {
-    return this.board[row][col];
-  }
+  get(row, col) { return this.board[row][col]; }
 
   set(row, col, value) {
-    if (!this.fixed[row][col]) {
-      this.board[row][col] = value;
-    }
+    if (!this.fixed[row][col]) this.board[row][col] = value;
   }
 
-  isFixed(row, col) {
-    return this.fixed[row][col];
-  }
+  isFixed(row, col) { return this.fixed[row][col]; }
 
   reset() {
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
-        if (!this.fixed[r][c]) {
-          this.board[r][c] = 0;
-        }
-      }
-    }
+    for (let r = 0; r < 9; r++)
+      for (let c = 0; c < 9; c++)
+        if (!this.fixed[r][c]) this.board[r][c] = 0;
   }
 
-  clone() {
-    return new SudokuBoard(this.board);
-  }
+  clone() { return new SudokuBoard(this.board); }
 
   lockAllCells() {
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
+    for (let r = 0; r < 9; r++)
+      for (let c = 0; c < 9; c++)
         this.fixed[r][c] = true;
-      }
-    }
   }
 }
-
-// ── UI ─────────────────────────────────────────────────
 
 class SudokuUI {
   constructor(boardManager) {
@@ -379,7 +337,6 @@ class SudokuUI {
 
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
-
         const cell = document.createElement('div');
         cell.classList.add('cell');
 
@@ -388,13 +345,9 @@ class SudokuUI {
 
         const value = this.boardManager.get(row, col);
         if (value !== 0) cell.textContent = value;
-
-        if (this.boardManager.isFixed(row, col)) {
-          cell.classList.add('fixed');
-        }
+        if (this.boardManager.isFixed(row, col)) cell.classList.add('fixed');
 
         cell.addEventListener('click', () => this.selectCell(row, col));
-
         this.boardElement.appendChild(cell);
       }
     }
@@ -414,40 +367,29 @@ class SudokuUI {
       const btn = document.createElement('div');
       btn.classList.add('number-btn');
       btn.textContent = num;
-
       btn.addEventListener('click', () => this.inputNumber(num));
-
       pad.appendChild(btn);
     }
   }
 
   inputNumber(num) {
     if (!this.selected) return;
-
     const { row, col } = this.selected;
 
-    // MODE NOTES
     if (notesMode) {
-      if (notes[row][col].has(num)) {
-        notes[row][col].delete(num);
-      } else {
-        notes[row][col].add(num);
-      }
+      if (notes[row][col].has(num)) notes[row][col].delete(num);
+      else notes[row][col].add(num);
       this.render();
       return;
     }
 
-    // MODE NORMAL
-    if (!isValid(this.boardManager.board, row, col, num)) {
-      return;
-    }
+    if (!isValid(this.boardManager.board, row, col, num)) return;
 
     notes[row][col].clear();
     this.boardManager.set(row, col, num);
     this.render();
 
-    const index = row * 9 + col;
-    const cell = document.querySelectorAll('.cell')[index];
+    const cell = document.querySelectorAll('.cell')[row * 9 + col];
     if (cell) {
       cell.classList.add('pop');
       setTimeout(() => cell.classList.remove('pop'), 150);
@@ -456,16 +398,11 @@ class SudokuUI {
 
   render() {
     const cells = document.querySelectorAll('.cell');
-
-    cells.forEach(cell => {
-      cell.classList.remove('selected', 'invalid', 'notes');
-    });
+    cells.forEach(cell => cell.classList.remove('selected', 'invalid', 'notes'));
 
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
-
-        const index = row * 9 + col;
-        const cell = cells[index];
+        const cell = cells[row * 9 + col];
         const value = this.boardManager.get(row, col);
 
         if (value === 0) {
@@ -485,26 +422,17 @@ class SudokuUI {
           cell.textContent = value;
         }
 
-        if (this.selected &&
-            this.selected.row === row &&
-            this.selected.col === col) {
+        if (this.selected && this.selected.row === row && this.selected.col === col)
           cell.classList.add('selected');
-        }
 
-        if (value !== 0 && !isValid(this.boardManager.board, row, col, value)) {
+        if (value !== 0 && !isValid(this.boardManager.board, row, col, value))
           cell.classList.add('invalid');
-        }
       }
     }
 
-    if (!solvingByAdmin && isBoardValid(this.boardManager.board)) {
-      showWinScreen();
-    }
+    if (!solvingByAdmin && isBoardValid(this.boardManager.board)) showWinScreen();
   }
 }
-
-
-// ── win detection ───────────────────────────────────────────
 
 function isBoardValid(board) {
   for (let r = 0; r < 9; r++) {
@@ -543,18 +471,13 @@ function isBoardValid(board) {
 
 function showWinScreen() {
   stopTimer();
-
   const win = document.getElementById("win-screen");
   win.style.display = "block";
   win.classList.add("show");
   startConfetti();
 
   const user = getLoggedUser();
-  if (user) {
-    win.textContent = `🎉 Bravo ${user} ! 🎉`;
-  } else {
-    win.textContent = "🎉 Puzzle Solved! 🎉";
-  }
+  win.textContent = user ? `🎉 Bravo ${user} ! 🎉` : "🎉 Puzzle Solved! 🎉";
 }
 
 function hideWinScreen() {
@@ -566,21 +489,17 @@ function hideWinScreen() {
   }
 }
 
-// ── confetti ───────────────────────────────────────────────
-
 function startConfetti() {
   const win = document.getElementById('win-screen');
   if (!win) return;
 
-  const count = 50;
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < 50; i++) {
     const confetti = document.createElement('div');
     confetti.className = 'confetti';
     confetti.style.left = Math.random() * 100 + 'vw';
     confetti.style.background = `hsl(${Math.random() * 360}, 70%, 50%)`;
     confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
     win.appendChild(confetti);
-
     setTimeout(() => confetti.remove(), 3000);
   }
 }
@@ -588,18 +507,9 @@ function startConfetti() {
 function clearConfetti() {
   const win = document.getElementById('win-screen');
   if (!win) return;
-  const pieces = win.querySelectorAll('.confetti');
-  pieces.forEach(p => p.remove());
+  win.querySelectorAll('.confetti').forEach(p => p.remove());
 }
 
-
-// ── ACCOUNT SYSTEM ─────────────────────────────────────────────
-
-
-
-// ── ACCOUNT SYSTEM (Node.js version) ─────────────────────────────
-
-// Keep these:
 function getLoggedUser() {
   return localStorage.getItem("loggedUser");
 }
@@ -609,19 +519,10 @@ function setLoggedUser(username) {
   else localStorage.removeItem("loggedUser");
 }
 
-// NEW isAdmin (safe because backend controls login)
 function isAdmin() {
   return getLoggedUser() === "Admin";
 }
 
-// NEW loginUser using backend
-// Auto-detect backend URL depending on environment
-
-
-
-
-
-// LOGIN
 async function loginUser(username, password) {
   const res = await fetch(`${API}/api/login`, {
     method: "POST",
@@ -630,22 +531,15 @@ async function loginUser(username, password) {
   });
 
   const data = await res.json();
-
-  if (!res.ok) {
-    showToast("❌ " + data.error);
-    return false;
-  }
+  if (!res.ok) { showToast("❌ " + data.error); return false; }
 
   localStorage.setItem("token", data.token);
   localStorage.setItem("loggedUser", data.username);
-
   updateAccountUI();
   showToast("🎉 Logged in!");
   return true;
 }
 
-
-// REGISTER
 async function registerUser(username, password) {
   const res = await fetch(`${API}/api/register`, {
     method: "POST",
@@ -654,16 +548,11 @@ async function registerUser(username, password) {
   });
 
   const data = await res.json();
-
-  if (!res.ok) {
-    showToast("❌ " + data.error);
-    return false;
-  }
+  if (!res.ok) { showToast("❌ " + data.error); return false; }
 
   showToast("✅ Account created!");
   return true;
 }
-
 
 function logoutUser() {
   localStorage.removeItem("token");
@@ -672,28 +561,18 @@ function logoutUser() {
   showToast("👋 Logged out");
 }
 
-
-
-
-
-
-
-
 function updateAccountUI() {
   const display = document.getElementById("account-display");
   const login = document.getElementById("account-login");
   const usernameSpan = document.getElementById("account-username");
   const solveBtn = document.getElementById("solve");
-
   const user = getLoggedUser();
 
   if (user) {
     display.style.display = "flex";
     login.style.display = "none";
     usernameSpan.textContent = "Logged as: " + user;
-
     solveBtn.style.display = isAdmin() ? "inline-block" : "none";
-
   } else {
     display.style.display = "none";
     login.style.display = "flex";
@@ -703,23 +582,14 @@ function updateAccountUI() {
   updateAdminDebug();
 }
 
-
-// ── ADMIN DEBUG PANEL ─────────────────────────────────────────────
-
 function updateAdminDebug() {
-  const panel = document.getElementById("admin-debug");
-  panel.style.display = isAdmin() ? "block" : "none";
+  document.getElementById("admin-debug").style.display = isAdmin() ? "block" : "none";
 }
 
 function refreshDebugData() {
-  const output = document.getElementById("debug-output");
-  const logged = getLoggedUser();
-
-  output.textContent =
-    "Logged user: " + logged + "\n\n" +
-    "Accounts: (server-side only)";
+  document.getElementById("debug-output").textContent =
+    "Logged user: " + getLoggedUser() + "\n\nAccounts: (server-side only)";
 }
-
 
 document.getElementById("debug-refresh").addEventListener("click", () => {
   refreshDebugData();
@@ -733,34 +603,15 @@ document.getElementById("debug-clear").addEventListener("click", () => {
   refreshDebugData();
 });
 
-
-
-
-
-
-
-
-
-
-// ── TOAST SYSTEM ─────────────────────────────────────────────
-
 function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
   toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2500);
+  setTimeout(() => toast.classList.remove("show"), 2500);
 }
-
-
-
-// ── MAIN ───────────────────────────────────────────────
 
 let boardManager, ui, timer, interval;
 
-// Start the timer
 function startTimer() {
   clearInterval(interval);
   timer = 0;
@@ -777,51 +628,30 @@ function stopTimer() {
   clearInterval(interval);
 }
 
-
-// Start a new game
 function newGame() {
   const clues = Number(document.getElementById('difficulty').value);
   document.getElementById('gen-stats').textContent = 'Generating puzzle…';
 
   setTimeout(() => {
-    const { board, puzzleAttempts, attempts, rejections } =
-      generateLogicPuzzle(clues);
-
+    const { board } = generateLogicPuzzle(clues);
     boardManager = new SudokuBoard(board);
     ui = new SudokuUI(boardManager);
-
     hideWinScreen();
     startTimer();
-
-    const label = puzzleAttempts === 1
-      ? '1 candidate'
-      : `${puzzleAttempts} candidates`;
-
-    document.getElementById('gen-stats').textContent =
-      `Puzzle Ready !!!`;
-
+    document.getElementById('gen-stats').textContent = 'Puzzle Ready !!!';
   }, 20);
 }
 
-
-// Charger comptes + admin
-
-  
 updateAccountUI();
 
-
-// Buttons
 document.getElementById('new-game').addEventListener('click', newGame);
 
 document.getElementById('solve').addEventListener('click', () => {
   solvingByAdmin = true;
-
   solve(boardManager.board);
   boardManager.lockAllCells();
   ui.render();
-
   showWinScreen();
-
   solvingByAdmin = false;
 });
 
@@ -833,16 +663,11 @@ document.getElementById('reset').addEventListener('click', () => {
 
 document.getElementById('win-screen').addEventListener('click', hideWinScreen);
 
-
-// Keyboard input
 document.addEventListener('keydown', event => {
   if (!ui || !ui.selected) return;
-
   const key = Number(event.key);
 
-  if (key >= 1 && key <= 9) {
-    ui.inputNumber(key);
-  }
+  if (key >= 1 && key <= 9) ui.inputNumber(key);
 
   if (event.key === 'Backspace' || event.key === 'Delete') {
     const { row, col } = ui.selected;
@@ -852,54 +677,35 @@ document.addEventListener('keydown', event => {
   }
 });
 
-
-// Notes mode toggle
 document.getElementById("notes-toggle").addEventListener("click", () => {
   notesMode = !notesMode;
   document.getElementById("notes-toggle").textContent =
     notesMode ? "✏️ Notes ON" : "✏️ Notes";
 });
 
-
-// Theme toggle
 document.getElementById("theme-toggle").addEventListener("click", () => {
   document.body.classList.toggle("dark");
 });
 
-
-// ACCOUNT UI TOGGLE
 document.getElementById("account-toggle").addEventListener("click", () => {
   const panel = document.getElementById("account-panel");
   panel.style.display = (panel.style.display === "flex") ? "none" : "flex";
 });
 
-
-
-
-// LOGIN
 document.getElementById("login-btn").addEventListener("click", () => {
   const u = document.getElementById("login-username").value.trim();
   const p = document.getElementById("login-password").value;
   loginUser(u, p);
 });
 
-// REGISTER
 document.getElementById("register-btn").addEventListener("click", async () => {
   const u = document.getElementById("login-username").value.trim();
   const p = document.getElementById("login-password").value;
-
   const success = await registerUser(u, p);
   if (success) await loginUser(u, p);
 });
 
-
-// LOGOUT
 document.getElementById("logout-btn").addEventListener("click", logoutUser);
 
-
-// INIT ACCOUNT UI
 updateAccountUI();
-
-
-// Start game on load
 newGame();
